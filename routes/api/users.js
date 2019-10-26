@@ -1,6 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const userModel = require('../../model/user');
+const jwt = require('jsonwebtoken');
+
+//token 생성
+signToken = user => {
+    return jwt.sign({
+        issue: 'doowankim',
+        sub: user._id,
+        iat: new Date().getTime(),
+        exp: new Date().setDate(new Date().getTime() + 1) //token이 발행되면 하루동안 유효하다는 뜻
+    }, process.env.SECRET);
+};
+
+
+
+
 
 // @route POST localhost:1500/users/signup
 // @desc register user
@@ -16,12 +31,14 @@ router.post('/signup', async (req, res) => { //async가 들어가면 await가 �
         });
     }
 
-    const newUser = new userModel({ username, email, password }); //newUser로 username, email, password 정보저장
+    const newUser = new userModel({ username, email, password });//newUser로 username, email, password 정보저장
+    const token = signToken(newUser);
     await newUser.save()
         .then(user => {
             res.json({
                 msg: 'Created',
-                userInfo: user
+                userInfo: user,
+                tokenInfo: token
             });
         });
 

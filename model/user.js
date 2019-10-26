@@ -22,9 +22,9 @@ const userSchema = mongoose.Schema({
     }
 });
 
-userSchema.pre('save', async function(next){
+userSchema.pre('save', async function(next){ //pre는 userSchema에 저장하기 전이라는 뜻
     try{
-        console.log('entered'); //저장을 할때 내보내는 메시지
+        console.log('entered'); //username, email, password를 저장할때 내보내는 메시지
         const salt = await bcrypt.genSalt(10);
 
         const passwordHash = await bcrypt.hash(this.password, salt);
