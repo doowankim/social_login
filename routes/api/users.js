@@ -60,8 +60,18 @@ router.post('/signup',validateBody(schemas.signupSchema), async (req, res) => { 
 
 // @route POST localhost:1500/users/login
 // @desc login user
-// @access Public
+// @access Private
 router.post('/login', localAuthCheck, (req, res) => {
+    const token = signToken(req.user);
+    res.status(200).json({
+        tokenInfo: token
+    });
+});
+
+// @route POST localhost:1500/users/google
+// @desc google login
+// @access Private
+router.post('/google', passport.authenticate('googleToken', { session: false }), (req, res) => {
     const token = signToken(req.user);
     res.status(200).json({
         tokenInfo: token

@@ -39,7 +39,16 @@ const userSchema = mongoose.Schema({
         }
     },
     google: {
-
+        id: {
+            type: String
+        },
+        email: {
+            type: String,
+            lowercase: true
+        },
+        username: {
+            type: String
+        }
     },
     facebook: {
 
@@ -52,6 +61,10 @@ const userSchema = mongoose.Schema({
 
 userSchema.pre('save', async function(next){ //pre는 userSchema에 저장하기 전이라는 뜻
     try{
+
+        if(this.method !== "local"){
+            next();
+        }
         console.log('entered'); //username, email, password를 저장할때 내보내는 메시지
         const salt = await bcrypt.genSalt(10);
 

@@ -3,6 +3,7 @@ const JwtStrategy = require('passport-jwt').Strategy;
 const { ExtractJwt } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const userModel = require('./model/user');
+const googlePlusTokenStrategy = require('passport-google-plus-token');
 
 //jsonwebtoken 검증
 passport.use(new JwtStrategy({
@@ -21,6 +22,9 @@ passport.use(new JwtStrategy({
         done(error, false); //false: 검증이 안됐다
     }
 }));
+
+
+
 // local일때 email password 인증 체크
 passport.use(new LocalStrategy({
     usernameField: 'email'
@@ -40,29 +44,36 @@ passport.use(new LocalStrategy({
         done(error, false);
     }
 }));
-// LOCAL STRATEGY
-// passport.use(new LocalStrategy({
-//     usernameField: 'email'
-// }, async (email, password, done) => {
-//     try {
-//         // Find the user given the email
-//         const user = await userModel.findOne({ "local.email": email });
-//
-//         // If not, handle it
-//         if (!user) {
-//             return done(null, false);
-//         }
-//
-//         // Check if the password is correct
-//         const isMatch = await user.isValidPassword(password);
-//         // If not, handle it
-//         if (!isMatch) {
-//             return done(null, false);
-//         }
-//         // Otherwise, return the user
-//         done(null, user);
-//     } catch(error) {
-//         done(error, false);
-//     }
-//
-// }));
+
+
+//google Token을 검증
+passport.use('googleToken', new googlePlusTokenStrategy({
+    clientID: process.env.GOOGLE_CLIENTID,
+    clientSecret: process.env.GOOGLE_CLIENTSECRET
+}, async (accessToken, refreshToken, profile, done) => {
+    console.log('profile', profile);
+    // console.log('accessToken', accessToken);
+    // console.log('refreshToken', refreshToken);
+    try {
+        const existingUser = await userModel.findOne({ "google.id": profile.id });
+        if(existingUser){
+            return done(null, existingUser);
+        }
+
+        const newUser = new userModel({
+            method: 'google',
+            google: {
+                username: profile.displayName,
+                id: profile.id,
+                email: profile.emails[0].value
+            }
+        });
+        await newUser.save();
+        done(null, newUser);
+    }
+    catch(error) {
+        done(error, false)
+    }
+
+
+}));
