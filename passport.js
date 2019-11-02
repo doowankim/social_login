@@ -4,6 +4,7 @@ const { ExtractJwt } = require('passport-jwt');
 const LocalStrategy = require('passport-local').Strategy;
 const userModel = require('./model/user');
 const googlePlusTokenStrategy = require('passport-google-plus-token');
+const facebookTokenStrategy = require('passport-facebook-token');
 
 //jsonwebtoken 검증
 passport.use(new JwtStrategy({
@@ -75,5 +76,30 @@ passport.use('googleToken', new googlePlusTokenStrategy({
         done(error, false)
     }
 
+}));
 
+passport.use('facebookToken', new facebookTokenStrategy({
+    clientID: process.env.FACEBOOK_CLIENTID,
+    clientSecret: process.env.FACEBOOK_CLIENTSECRET
+}, async (accessToken, refreshToken, profile, done) => {
+    console.log('profile', profile);
+    try {
+        const existingUser = await userModel.findOne({"facebook.id": profile.id});
+        if(existingUser){
+            return done(null, existingUser);
+        }
+        const newUser = new userModel({
+            method: 'facebook',
+            facebook: {
+                id: profile.id,
+                username: profile.name.familyName,
+                email: profile.emails[0].value
+            }
+        });
+        await newUser.save();
+        done(null, newUser);
+    }
+    catch(error) {
+        done(error, false)
+    }
 }));

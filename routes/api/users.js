@@ -78,5 +78,15 @@ router.post('/google', passport.authenticate('googleToken', { session: false }),
     });
 });
 
+// @route POST localhost:1500/users/facebook
+// @desc facebook login
+// @access Private
+router.post('/facebook', passport.authenticate('facebookToken', {session: false}), (req, res) => {
+    const token = signToken(req.user);
+    res.status(200).json({
+        tokenInfo: token
+    });
+});
+
 
 module.exports = router;
