@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userModel = require('../../model/user');
 const jwt = require('jsonwebtoken');
+const Avatar = require('gravatar');
 const {schemas, validateBody} = require('../../helpers/routeHelpers'); //routeHelpers안에있는 schemas를 불러옴
 const passport = require('passport');
 const passportConf = require("../../passport");
@@ -35,13 +36,19 @@ router.post('/signup',validateBody(schemas.signupSchema), async (req, res) => { 
             msg: 'email is already is use'
         });
     }
+    const avatar = Avatar.url(req.body.email, {
+        s: '200',
+        r: 'pg',
+        d: 'mm'
+    });
 
     const newUser = new userModel({
         method: 'local',
         local: {
             username: username,
             email: email,
-            password: password
+            password: password,
+            avatar
         }
     });//newUser로 username, email, password 정보저장
     const token = signToken(newUser);

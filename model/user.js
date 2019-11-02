@@ -36,6 +36,9 @@ const userSchema = mongoose.Schema({
         },
         password: {
             type: String
+        },
+        avatar: {
+            type: String
         }
     },
     google: {
@@ -48,6 +51,9 @@ const userSchema = mongoose.Schema({
         },
         username: {
             type: String
+        },
+        avatar: {
+            type: String
         }
     },
     facebook: {
@@ -59,6 +65,9 @@ const userSchema = mongoose.Schema({
             lowercase: true
         },
         username: {
+            type: String
+        },
+        avatar: {
             type: String
         }
     },
