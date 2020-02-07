@@ -1,4 +1,17 @@
-## Server Api
+# 소셜 로그인 제작
 
-- [x] google, facebook login 기능 추가
-- [x] 일반 로그인 기능
+## Tool
+* 사용 언어 : node.js
+
+## 의도
+* 쇼핑몰 제작의 로그인 기능을 바탕으로 대중적인 facebook, google 로그인을 제작해보기 위함
+
+## 기획
+
+### 1. 서버 구상
+* google과 facebook의 Client ID, ClientSecret을 .env로 저장한 후, google의 accessToken, facebook의 accessToken을 각각 받아와서
+REST api 테스트
+
+#### API Verb
+- [x] 회원가입
+- [x] 소셜로그인
