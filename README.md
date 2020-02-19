@@ -1,7 +1,8 @@
 # 소셜 로그인 제작
 
 ## Tool
-* 사용 언어 : node.js
+* Language & Framework : Node.js, Express.js
+* Database : MongoDB
 
 ## 의도
 * 쇼핑몰 제작의 로그인 기능을 바탕으로 대중적인 facebook, google 로그인을 제작해보기 위함
