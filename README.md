@@ -34,3 +34,9 @@ REST api 테스트
 | [express](https://github.com/expressjs/express)                                             | Node.js 웹 애플리케이션 프레임워크                                                                                                                                           | -                  |
 | [morgan](https://github.com/expressjs/morgan)                                               | node.js 용 HTTP 요청 로거 미들웨어                                                                                                                                                                                                                                                                            | -                  |
 | [body-parser](https://github.com/expressjs/body-parser)                            | Node.js 본문 구문 분석 미들웨어                                                                                                                                                | -                  |
+
+### devDependencies
+
+| 모듈                                                                                                                      | 역할                                                                        | 사용한 부분 |
+| ------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ----------- |
+| [nodemon](https://github.com/remy/nodemon)                                                                                | node.js 응용 프로그램의 변경 사항을 모니터링하고 서버를 자동으로 다시 시작   | -           |
